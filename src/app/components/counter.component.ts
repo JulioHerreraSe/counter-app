@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { decrement, increment, reset } from '../store/items.action';
 
 @Component({
   selector: 'app-counter',
@@ -11,22 +13,25 @@ export class CounterComponent {
 
   counter: number;
 
-  constructor() {
+  constructor(private store: Store<{counter: number}>) {
     this.counter = 0;
+    this.store.select('counter').subscribe( counter => {
+      this.counter = counter;
+    })
   }
 
   increment(): void {
-    this.counter++;
+    this.store.dispatch(increment({ add: 2}));
     console.log('Incrementado el contador');
   }
 
   decrement(): void {
-    this.counter--;
+    this.store.dispatch(decrement());
     console.log('decrementando el contador');
   }
 
   reset(): void {
-    this.counter = 0;
+    this.store.dispatch(reset());
     console.log('reset del contador');
   }
 
